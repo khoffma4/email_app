@@ -17,6 +17,11 @@ describe SendEmail do
       expect(email.to).to eql 'fake@example.com'
       expect(email.from).to eql 'noreply@mybrightwheel.com'
     end
+
+    it 'strips html tags from the body' do
+      email = SendEmail.new(valid_input)
+      expect(email.body).to eql "*********\nYour Bill\n*********\n\n$10"
+    end
   end
 
   describe "validations" do

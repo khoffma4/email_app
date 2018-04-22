@@ -54,6 +54,7 @@ GEM
     erubi (1.7.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    htmlentities (4.3.4)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     loofah (2.2.2)
@@ -140,6 +141,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   curb
+  htmlentities
   puma (~> 3.11)
   rails (~> 5.2.0)
   rspec-rails (~> 3.7)

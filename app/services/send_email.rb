@@ -1,5 +1,6 @@
 class SendEmail
   include ActiveModel::Model
+  include HtmlToPlainText
 
   attr_accessor :to, :to_name, :from, :from_name, :subject, :body
 
@@ -16,7 +17,7 @@ class SendEmail
     @from      = params['from']
     @from_name = params['from_name']
     @subject   = params['subject']
-    @body      = params['body']
+    @body      = convert_to_text(params['body'])
   end
 
   def deliver
