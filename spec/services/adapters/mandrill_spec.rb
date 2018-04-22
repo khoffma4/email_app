@@ -67,13 +67,18 @@ describe Adapters::Mandrill do
 
   describe '.sent?' do
     before(:each) { @mandrill = Adapters::Mandrill.new(input) }
-    it 'returns true if id is present' do
-      @mandrill.stub(id: 'mandrill_id')
+    it 'returns true if id is present and error is nil' do
+      @mandrill.stub(id: 'mandrill_id', error: nil)
       expect(@mandrill.sent?).to eql true
     end
 
     it 'returns false if id is blank' do
-      @mandrill.stub(id: nil)
+      @mandrill.stub(id: nil, error: nil)
+      expect(@mandrill.sent?).to eql false
+    end
+
+    it 'returns false if an error is present' do
+      @mandrill.stub(id: 'mandrill_id', error: 'error')
       expect(@mandrill.sent?).to eql false
     end
   end

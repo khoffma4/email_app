@@ -26,7 +26,7 @@ module Adapters
     end
 
     def sent?
-      id.present?
+      id.present? && error.blank?
     end
 
     def id
