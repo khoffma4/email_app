@@ -19,3 +19,6 @@
 /config/master.key
 
 .DS_Store
+
+config/application.yml
+config/application_test.yml
