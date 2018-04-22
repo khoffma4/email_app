@@ -20,7 +20,17 @@ class SendEmail
   end
 
   def deliver
-    email_client.deliver(
+    email_client.deliver
+  end
+
+  def self.adapter
+    Adapters::Mandrill
+  end
+
+  private
+
+  def email_client
+    @email_client ||= SendEmail.adapter.new(
       to:        @to,
       to_name:   @to_name,
       from:      @from,
@@ -28,12 +38,6 @@ class SendEmail
       subject:   @subject,
       body:      @body
     )
-  end
-
-  private
-
-  def email_client
-    @email_client ||= OpenStruct.new(deliver: true)
   end
 
 end

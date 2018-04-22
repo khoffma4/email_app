@@ -65,12 +65,24 @@ describe SendEmail do
     end
   end
 
+  describe '#adapter' do
+    it "is a Adapters::Mandrill object" do
+      expect(SendEmail.adapter).to eql Adapters::Mandrill
+    end
+  end
+
   describe '.deliver' do
     it "sends the email" do
+      expect_any_instance_of(Adapters::Mandrill).to receive(:deliver).and_return(true)
       email = SendEmail.new(valid_input)
-      client = email.send(:email_client)
-      expect(client).to receive(:deliver)
       email.deliver
+    end
+  end
+
+  describe '.email_client' do
+    it 'is an instance of the adapter' do
+      email = SendEmail.new(valid_input)
+      expect(email.send(:email_client)).to be_a Adapters::Mandrill
     end
   end
 
