@@ -20,7 +20,12 @@ class SendEmail
   end
 
   def deliver
-    email_client.deliver
+    if valid?
+      email_client.deliver
+      true
+    else
+      false
+    end
   end
 
   def self.adapter
@@ -31,6 +36,21 @@ class SendEmail
 
     provider_hash[ENV['EMAIL_CLIENT']]
   end
+
+  def to_json
+    {
+      email_client: ENV['EMAIL_CLIENT'],
+      id: email_client.id,
+      sent: email_client.sent?,
+      to: @to,
+      to_name: @to_name,
+      from: @from,
+      from_name: @from_name,
+      subject: @subject,
+      body: @body
+    }.to_json
+  end
+
 
   private
 

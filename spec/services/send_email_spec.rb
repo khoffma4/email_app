@@ -97,4 +97,26 @@ describe SendEmail do
     end
   end
 
+  describe '.to_json' do
+    before(:each) do
+      allow_any_instance_of(SendEmail.adapter).to receive(:id).and_return('email_id')
+      allow_any_instance_of(SendEmail.adapter).to receive(:sent?).and_return(true)
+      @send_email = SendEmail.new(valid_input)
+    end
+
+    it "has the email id" do
+      expect(JSON.parse(@send_email.to_json)['id']).to eql 'email_id'
+    end
+
+    it "includes if the email was sent" do
+      expect(JSON.parse(@send_email.to_json)['sent']).to eql true
+    end
+
+    it "has the email service provider" do
+      expect(
+        JSON.parse(@send_email.to_json)['email_client']
+      ).to eql ENV['EMAIL_CLIENT']
+    end
+  end
+
 end
