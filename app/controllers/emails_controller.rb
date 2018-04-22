@@ -1,5 +1,6 @@
 class EmailsController < ApplicationController
 
+  # POST /email
   def create
     email = SendEmail.new(email_params)
 
