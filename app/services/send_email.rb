@@ -1,5 +1,5 @@
 class SendEmail
-  include ActiveModel::Model
+  include ActiveModel::Validations
   include HtmlToPlainText
 
   attr_accessor :to, :to_name, :from, :from_name, :subject, :body
