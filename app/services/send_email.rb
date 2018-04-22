@@ -24,7 +24,12 @@ class SendEmail
   end
 
   def self.adapter
-    Adapters::Mandrill
+    provider_hash = {
+      'Mandrill' => Adapters::Mandrill,
+      'Mailgun' => Adapters::Mailgun
+    }
+
+    provider_hash[ENV['EMAIL_CLIENT']]
   end
 
   private
