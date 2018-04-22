@@ -29,12 +29,10 @@ class SendEmail
   end
 
   def self.adapter
-    provider_hash = {
-      'Mandrill' => Adapters::Mandrill,
-      'Mailgun' => Adapters::Mailgun
-    }
+    adapter = ENV['EMAIL_CLIENT'] || 'Mandrill'
 
-    provider_hash[ENV['EMAIL_CLIENT']]
+    { 'Mandrill' => Adapters::Mandrill,
+      'Mailgun'  => Adapters::Mailgun }[adapter]
   end
 
   def to_json

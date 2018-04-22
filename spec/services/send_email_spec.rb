@@ -69,6 +69,11 @@ describe SendEmail do
     before(:each) { @client = ENV['EMAIL_CLIENT'] }
     after(:each) { ENV['EMAIL_CLIENT'] = @client }
 
+    it "uses Mandrill if the ENV is not sent" do
+      ENV['EMAIL_CLIENT'] = nil
+      expect(SendEmail.adapter).to eql Adapters::Mandrill
+    end
+
     it "is a Adapters::Mandrill object" do
       ENV['EMAIL_CLIENT'] = 'Mandrill'
       expect(SendEmail.adapter).to eql Adapters::Mandrill
