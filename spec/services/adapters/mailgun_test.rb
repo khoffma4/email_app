@@ -46,6 +46,41 @@ describe Adapters::Mailgun do
     end
   end
 
+  describe '.sent?' do
+    before(:each) { @mailgun = Adapters::Mailgun.new(input) }
+    it 'returns true if id is present' do
+      @mailgun.stub(id: 'mailgun_id')
+      expect(@mailgun.sent?).to eql true
+    end
+
+    it 'returns false if id is blank' do
+      @mailgun.stub(id: nil)
+      expect(@mailgun.sent?).to eql false
+    end
+  end
+
+  describe '.id' do
+    it 'returns the response id' do
+      mailgun = Adapters::Mailgun.new(input)
+      mailgun.response = {'id' => 'mailgun_id'}
+      expect(mailgun.id).to eql 'mailgun_id'
+    end
+  end
+
+  describe '.error' do
+    before(:each) { @mailgun = Adapters::Mailgun.new(input) }
+
+    it 'is set to the response message' do
+      @mailgun.response = {'id' => 'mailgun_id', 'message' => 'not an error message'}
+      expect(@mailgun.error).to be_nil
+    end
+
+    it 'is nil if there is an id' do
+      @mailgun.response = {'message' => 'error message'}
+      expect(@mailgun.error).to eql 'error message'
+    end
+  end
+
   def input
     { 'to'        => ENV['MAILGUN_SANDBOX_EMAIL'],
       'to_name'   => "Mr. Fake",

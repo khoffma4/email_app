@@ -3,7 +3,7 @@ module Adapters
 
     BASE_URL = 'https://api:' + ENV['MAILGUN_API_KEY'] + '@api.mailgun.net/v3/' + ENV['MAILGUN_DOMAIN'] + '/'
 
-    attr_accessor :to, :from, :subject, :text, :response
+    attr_accessor :to, :from, :subject, :text, :response, :id, :error
 
     def initialize(args)
       @to      = "#{args['to_name']} <#{args['to']}>"
@@ -21,6 +21,19 @@ module Adapters
         Curl::PostField.content('text',    @text)
       )
       @response = JSON.parse(response.body)
+    end
+
+    def sent?
+      id.present?
+    end
+
+    def id
+      @id ||= @response['id']
+    end
+
+    def error
+      return unless id.nil?
+      @error ||= @response['message']
     end
 
   end

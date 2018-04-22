@@ -3,7 +3,8 @@ module Adapters
 
     BASE_URL = 'https://mandrillapp.com/api/1.0/'
 
-    attr_accessor :to, :from_email, :from_name, :subject, :text, :response
+    attr_accessor :to, :from_email, :from_name, :subject, :text,
+                  :response, :id, :error
 
     def initialize(args)
       @to = [{
@@ -20,7 +21,20 @@ module Adapters
 
     def deliver
       response =  Curl.post(BASE_URL + 'messages/send.json', email_json)
-      @response = JSON.parse(response.body).first
+      response = JSON.parse(response.body)
+      @response = response.is_a?(Array) ? response.first : response
+    end
+
+    def sent?
+      id.present?
+    end
+
+    def id
+      @id ||= @response['_id']
+    end
+
+    def error
+      @error ||= @response['reject_reason']
     end
 
     private
