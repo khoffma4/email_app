@@ -29,13 +29,6 @@ class SendEmail
     end
   end
 
-  def self.adapter
-    adapter = ENV['EMAIL_CLIENT'] || 'Mandrill'
-
-    { 'Mandrill' => Adapters::Mandrill,
-      'Mailgun'  => Adapters::Mailgun }[adapter]
-  end
-
   def to_json
     {
       email_client: ENV['EMAIL_CLIENT'],
@@ -50,11 +43,10 @@ class SendEmail
     }.to_json
   end
 
-
   private
 
   def email_client
-    @email_client ||= SendEmail.adapter.new(
+    @email_client ||= EMAIL_ADAPTER.new(
       to:        @to,
       to_name:   @to_name,
       from:      @from,

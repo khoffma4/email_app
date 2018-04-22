@@ -70,30 +70,9 @@ describe SendEmail do
     end
   end
 
-  describe '#adapter' do
-    before(:each) { @client = ENV['EMAIL_CLIENT'] }
-    after(:each) { ENV['EMAIL_CLIENT'] = @client }
-
-    it "uses Mandrill if the ENV is not sent" do
-      ENV['EMAIL_CLIENT'] = nil
-      expect(SendEmail.adapter).to eql Adapters::Mandrill
-    end
-
-    it "is a Adapters::Mandrill object" do
-      ENV['EMAIL_CLIENT'] = 'Mandrill'
-      expect(SendEmail.adapter).to eql Adapters::Mandrill
-    end
-
-    it "is a Adapters::Mailgun object" do
-      ENV['EMAIL_CLIENT'] = 'Mailgun'
-      expect(SendEmail.adapter).to eql Adapters::Mailgun
-    end
-  end
-
   describe '.deliver' do
     it "sends the email" do
-      adapter = SendEmail.adapter
-      expect_any_instance_of(adapter).to receive(:deliver).and_return(true)
+      expect_any_instance_of(EMAIL_ADAPTER).to receive(:deliver).and_return(true)
       email = SendEmail.new(valid_input)
       email.deliver
     end
@@ -101,16 +80,15 @@ describe SendEmail do
 
   describe '.email_client' do
     it 'is an instance of the adapter' do
-      adapter = SendEmail.adapter
       email = SendEmail.new(valid_input)
-      expect(email.send(:email_client)).to be_a adapter
+      expect(email.send(:email_client)).to be_a EMAIL_ADAPTER
     end
   end
 
   describe '.to_json' do
     before(:each) do
-      allow_any_instance_of(SendEmail.adapter).to receive(:id).and_return('email_id')
-      allow_any_instance_of(SendEmail.adapter).to receive(:sent?).and_return(true)
+      allow_any_instance_of(EMAIL_ADAPTER).to receive(:id).and_return('email_id')
+      allow_any_instance_of(EMAIL_ADAPTER).to receive(:sent?).and_return(true)
       @send_email = SendEmail.new(valid_input)
     end
 
